@@ -1,4 +1,4 @@
-import { ALL_ROOM } from "redux/constants/roomConstant";
+import { ALL_ROOM, GET_ROOM } from "redux/constants/roomConstant";
 
 const intialState = {
   roomList: [],
@@ -7,6 +7,7 @@ const intialState = {
   roomsCount: 0,
   filteredRoomsCount: 0,
   resPerPage: 4,
+  roomDetail: {}
 };
 
 const roomReducer = (state = intialState, action) => {
@@ -15,6 +16,7 @@ const roomReducer = (state = intialState, action) => {
   switch (action.type) {
     case ALL_ROOM.pending:
       newState.loader = [...newState.loader, ALL_ROOM.pending];
+      newState.error = '';
       return newState;
 
     case ALL_ROOM.success:
@@ -27,6 +29,21 @@ const roomReducer = (state = intialState, action) => {
 
     case ALL_ROOM.failed:
       newState.loader = newState.loader.filter((el) => el !== ALL_ROOM.pending);
+      newState.error = action.payload;
+      return newState;
+    
+    case GET_ROOM.pending:
+      newState.loader = [...newState.loader, GET_ROOM.pending];
+      newState.error = '';
+      return newState;
+    
+    case GET_ROOM.success:
+      newState.loader = newState.loader.filter(el => el !== GET_ROOM.pending);
+      newState.roomDetail = action.payload.room;
+      return newState;
+    
+    case GET_ROOM.failed:
+      newState.loader = newState.loader.filter(el => el !== ALL_ROOM.pending);
       newState.error = action.payload;
       return newState;
   }
