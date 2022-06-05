@@ -1,31 +1,55 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import RoomCard from "./room/RoomCard";
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import RoomCard from './room/RoomCard';
+import Pagination from 'react-js-pagination';
 
 const Home = () => {
-  const { roomList, error } = useSelector((state) => state.room);
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, []);
-  return (
-    <section id="rooms" className="container mt-5">
-      <h2 className="mb-3 ml-2 stays-heading">Stays in New York</h2>
+    const { roomList, filteredRoomsCount, resPerPage, error } = useSelector((state) => state.room);
+    const [activePage, setActivePage] = useState(1);
+    const router = useRouter();
 
-      <a href="#" className="ml-2 back-to-search">
-        <i className="fa fa-arrow-left"></i> Back to Search
-      </a>
-      <div className="row">
-        {roomList && roomList.length === 0 ? (
-          <div className="alert alert-danger">No Rooms.</div>
-        ) : (
-          roomList.map((room) => <RoomCard room={room} key={room._id} />)
-        )}
-      </div>
-    </section>
-  );
+    const handlePagination = (currentPage) => {
+        setActivePage(currentPage);
+        router.push({
+            pathname: '/',
+            query : {...router.query, page: currentPage}
+        })
+    };
+
+    useEffect(() => {
+        if (error) {
+            toast.error(error);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!router.query.page) {
+            setActivePage(1);
+        } else {
+            setActivePage(Number(router.query.page));
+        }
+    }, [router.query.page]);
+    return (
+        <>
+            <section id='rooms' className='container mt-5'>
+                <h2 className='mb-3 ml-2 stays-heading'>{ router.query.location ? `Stays in ${router.query.location}` : 'All Rooms'}</h2>
+                <Link href={'/search'}>
+                    <a className='ml-2 back-to-search'>
+                        <i className='fa fa-arrow-left'></i> Back to Search
+                    </a>
+                </Link>
+                <div className='row'>{roomList && roomList.length === 0 ? <div className='alert alert-danger w-100 text-center mt-5'>No Rooms.</div> : roomList.map((room) => <RoomCard room={room} key={room._id} />)}</div>
+            </section>
+            {resPerPage < filteredRoomsCount ? (
+                <div className='w-100 d-flex justify-content-center mt-5'>
+                    <Pagination activePage={activePage} itemsCountPerPage={resPerPage} totalItemsCount={filteredRoomsCount} nextPageText={'Next'} prevPageText={'Prev'} firstPageText={'First'} lastPageText={'Last'} onChange={handlePagination} itemClass='page-item' linkClass='page-link' />
+                </div>
+            ) : null}
+        </>
+    );
 };
 
 export default Home;
