@@ -33,7 +33,7 @@ const RoomCard = ({ room }) => {
               <span id="no_of_reviews">({room.numOfReviews} Reviews)</span>
             </div>
             <button className="btn btn-block view-btn">
-              <Link href={`/room/${room._id}`}>
+              <Link href='/room/[id]' as={`/room/${room._id}`}>
                 <a>View Details</a>
               </Link>
             </button>
