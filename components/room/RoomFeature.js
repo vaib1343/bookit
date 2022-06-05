@@ -2,7 +2,6 @@ import room from 'models/room';
 import React from 'react';
 
 const RoomFeature = ({ roomDetail }) => {
-    console.log('room Detail', roomDetail)
     return (
         <>
             <div className='features mt-5'>
