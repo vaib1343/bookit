@@ -1,7 +1,7 @@
 import { REGISTER_USER } from 'redux/constants/authConstant';
 
 const intialState = {
-    user: {},
+    success:{},
     loader: [],
     error: '',
 };
@@ -12,11 +12,11 @@ const authReducer = (state = intialState, action) => {
         case REGISTER_USER.pending:
             newState.loader = [...newState.loader, REGISTER_USER.pending];
             newState.error = '';
-            return;
+            return newState;
 
         case REGISTER_USER.success:
             newState.loader = newState.loader.filter((el) => el !== REGISTER_USER.pending);
-            newState.user = action.payload;
+            newState.success = action.payload;
             return newState;
 
         case REGISTER_USER.failed:
