@@ -21,7 +21,7 @@ const Login = () => {
         });
         setLoading(false);
         if (result.error) {
-            // toast.error(result.error);
+            toast.error(result.error);
         } 
         else {
             router.push('/');
