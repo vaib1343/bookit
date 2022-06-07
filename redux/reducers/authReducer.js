@@ -1,4 +1,4 @@
-import { GET_USER, REGISTER_USER } from 'redux/constants/authConstant';
+import { GET_USER, REGISTER_USER, UPDATE_USER } from 'redux/constants/authConstant';
 
 const intialState = {
     success: {},
@@ -6,6 +6,7 @@ const intialState = {
     error: '',
     user: {},
     isAuthenticated: false,
+    updateUser: false,
 };
 
 const authReducer = (state = intialState, action) => {
@@ -39,6 +40,21 @@ const authReducer = (state = intialState, action) => {
 
         case GET_USER.failed:
             newState.loader = newState.loader.filter((el) => el !== GET_USER.pending);
+            newState.error = action.payload;
+            return newState;
+
+        case UPDATE_USER.pending:
+            newState.loader = [...newState.loader, UPDATE_USER.pending];
+            newState.error = '';
+            return newState;
+
+        case UPDATE_USER.success:
+            newState.loader = newState.loader.filter((el) => el !== UPDATE_USER.pending);
+            newState.updateUser = true;
+            return newState;
+
+        case UPDATE_USER.failed:
+            newState.loader = newState.loader.filter((el) => el !== UPDATE_USER.pending);
             newState.error = action.payload;
             return newState;
     }
