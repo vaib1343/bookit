@@ -6,6 +6,12 @@ const nextConfig = {
         CLOUDINARY_CLOUD_NAME: 'dmgsaurar',
         CLOUDINARY_API_KEY: '356812392234265',
         CLOUDINARY_APISECRET: 'vwq9ExwW-A1qV2vw7cOn9ZC_Z4E',
+        SMTP_HOST: 'smtp.mailtrap.io',
+        SMTP_PORT: '2525',
+        SMTP_USER: '020091f8fd0ca6',
+        SMTP_PASS: 'a7294d137af240',
+        SMTP_FROM_NAME:'Bookit',
+        SMTP_FROM_EMAIL: 'noreply@bootkit.com'
     },
     images: {
         domains: ['res.cloudinary.com'],

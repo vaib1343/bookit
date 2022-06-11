@@ -1,4 +1,4 @@
-import { GET_USER, REGISTER_USER, UPDATE_USER } from 'redux/constants/authConstant';
+import { FORGOT_PASSWORD, GET_USER, REGISTER_USER, UPDATE_USER } from 'redux/constants/authConstant';
 
 const intialState = {
     success: {},
@@ -7,6 +7,7 @@ const intialState = {
     user: {},
     isAuthenticated: false,
     updateUser: false,
+    forgotPasswordMessage: '',
 };
 
 const authReducer = (state = intialState, action) => {
@@ -40,7 +41,6 @@ const authReducer = (state = intialState, action) => {
 
         case GET_USER.failed:
             newState.loader = newState.loader.filter((el) => el !== GET_USER.pending);
-            newState.error = action.payload;
             return newState;
 
         case UPDATE_USER.pending:
@@ -55,6 +55,21 @@ const authReducer = (state = intialState, action) => {
 
         case UPDATE_USER.failed:
             newState.loader = newState.loader.filter((el) => el !== UPDATE_USER.pending);
+            newState.error = action.payload;
+            return newState;
+
+        case FORGOT_PASSWORD.pending:
+            newState.loader = [...newState.loader, FORGOT_PASSWORD.pending];
+            newState.error = '';
+            return newState;
+
+        case FORGOT_PASSWORD.success:
+            newState.loader = newState.loader.filter(el => el !== FORGOT_PASSWORD.pending);
+            newState.forgotPasswordMessage = action.payload.message;
+            return newState;
+
+        case FORGOT_PASSWORD.failed:
+            newState.loader = newState.loader.filter((el) => el !== FORGOT_PASSWORD.pending);
             newState.error = action.payload;
             return newState;
     }

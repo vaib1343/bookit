@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_USER, REGISTER_USER, UPDATE_USER } from 'redux/constants/authConstant';
+import { FORGOT_PASSWORD, GET_USER, REGISTER_USER, UPDATE_USER } from 'redux/constants/authConstant';
 
 export const registerAction = (data) => {
     return async (dispatch, getState) => {
@@ -43,7 +43,24 @@ export const updateUserDetail = (data) => {
             const response = await axios.put('/api/me/update', data, config);
             dispatch({ type: UPDATE_USER.success, payload: response.data?.success });
         } catch (error) {
-            dispatch({ type: UPDATE_USER.pending, payload: error.response.data.message });
+            dispatch({ type: UPDATE_USER.failed, payload: error.response.data.message });
         }
     };
 };
+
+export const forgotPasswordAction = (data) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({type: FORGOT_PASSWORD.pending});
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const response = await axios.post('/api/password/forgot', data, config);
+            dispatch({type: FORGOT_PASSWORD.success, payload: response.data.message});
+        } catch (error) {
+            dispatch({ type: FORGOT_PASSWORD.failed, payload: error.response.data.message });
+        }
+    }
+}
