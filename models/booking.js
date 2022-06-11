@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import timeZone from 'mongoose-timezone';
 const bookingSchema = new mongoose.Schema({
     room: {
         type: mongoose.Schema.Types.ObjectId,
@@ -19,7 +19,11 @@ const bookingSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    daysOfstay: {
+    amountPaid: {
+        type: Number,
+        required: true,
+    },
+    daysOfStay: {
         type: Number,
         required: true,
     },
@@ -43,4 +47,6 @@ const bookingSchema = new mongoose.Schema({
     },
 });
 
-export default mongoose.models.Booking || mongoose.models('Booking', bookingSchema);
+bookingSchema.plugin(timeZone)
+
+export default mongoose?.models?.Booking || mongoose.model('Booking', bookingSchema);

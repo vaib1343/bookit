@@ -1,20 +1,65 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 import { Carousel } from 'react-bootstrap';
 import RoomFeature from './RoomFeature';
 import DatePicker from 'react-datepicker';
+import axios from 'axios';
+import { checkBookedDates, checkRoomAvailability } from 'redux/actions/bookingAction';
+import { ROOM_AVAILABILITY } from 'redux/constants/bookingConstant';
+
 const RoomDetail = () => {
     const { roomDetail } = useSelector((state) => state.room);
-    const [checkInDate, setCheckInDate] = useState(Date.now());
-    const [checkOutDate, setCheckOutDate] = useState('');
-
+    const { roomAvailabilty, bookedDates } = useSelector((state) => state.booking);
+    const { user } = useSelector((state) => state.user);
+    const [checkInDate, setCheckInDate] = useState();
+    const [checkOutDate, setCheckOutDate] = useState();
+    const [daysOfStay, setdaysOfStay] = useState();
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const excludedDates = bookedDates.map((dates) => new Date(dates));
     const handleDate = (dates) => {
         const [checkInDate, checkOutDate] = dates;
         setCheckInDate(checkInDate);
         setCheckOutDate(checkOutDate);
+        if (checkInDate && checkOutDate) {
+            const days = Math.floor((new Date(checkOutDate) - new Date(checkInDate)) / 86400000 + 1);
+            setdaysOfStay(days);
+            dispatch(checkRoomAvailability(router.query.id, checkInDate, checkOutDate));
+        }
     };
+
+    const handleBooking = async () => {
+        const bookingData = {
+            room: router.query.id,
+            checkInDate,
+            checkOutDate,
+            daysOfStay,
+            amountPaid: 90,
+            paymentInfo: {
+                id: 'STRIPE_PAYMENT_ID',
+                status: 'STRIPE_PAYMENT_STATUS',
+            },
+        };
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const { data } = await axios.post(`/api/bookings`, bookingData, config);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        dispatch(checkBookedDates(router.query.id));
+    }, []);
+
     return (
         <>
             <Head>
@@ -55,9 +100,16 @@ const RoomDetail = () => {
                             </p>
                             <hr />
                             <p className='mt-5 mb-3'>Pick Check In & Check Out Date</p>
-                            <DatePicker className='w-100' selected={checkInDate} onChange={handleDate} startDate={checkInDate} endDate={checkOutDate} selectsRange inline minDate={Date.now()} />
+                            <DatePicker className='w-100' selected={checkInDate} onChange={handleDate} startDate={checkInDate} endDate={checkOutDate} selectsRange inline minDate={Date.now()} excludeDates={excludedDates} />
 
-                            <button className='btn btn-block py-3 booking-btn'>Pay</button>
+                            {roomAvailabilty && <div className='alert alert-success my-3 font-weight-bold'>Room is available. Book now</div>}
+                            {!roomAvailabilty && <div className='alert alert-danger my-3 font-weight-bold'>Room is not available. Try different date.</div>}
+                            {roomAvailabilty && !Object.keys(user).length && <div className='alert alert-danger my-3 font-weight-bold'>Login to book room</div>}
+                            {roomAvailabilty && !!Object.keys(user).length && (
+                                <button className='btn btn-block py-3 booking-btn' onClick={handleBooking}>
+                                    Pay
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
