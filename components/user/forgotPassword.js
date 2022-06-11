@@ -44,7 +44,7 @@ const ForgotPassowrd = () => {
                                 <input className='form-control' type='email' name='email' placeholder='xyz@gmail.com' id='email_field' value={email} onChange={handleChange} />
                             </div>
                             <button id='forgot_button' onClick={handleSubmit} className='btn btn-block py-3' disabled={loading}>
-                                {loading ? <ButtonLoader /> : 'LOGIN'}
+                                {loading ? <ButtonLoader /> : 'SENT REQUEST'}
                             </button>
                         </form>
                     </div>

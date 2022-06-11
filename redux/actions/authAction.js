@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FORGOT_PASSWORD, GET_USER, REGISTER_USER, UPDATE_USER } from 'redux/constants/authConstant';
+import { FORGOT_PASSWORD, GET_USER, REGISTER_USER, RESET_PASSWORD, UPDATE_USER } from 'redux/constants/authConstant';
 
 export const registerAction = (data) => {
     return async (dispatch, getState) => {
@@ -51,16 +51,35 @@ export const updateUserDetail = (data) => {
 export const forgotPasswordAction = (data) => {
     return async (dispatch, getState) => {
         try {
-            dispatch({type: FORGOT_PASSWORD.pending});
+            dispatch({ type: FORGOT_PASSWORD.pending });
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             };
             const response = await axios.post('/api/password/forgot', data, config);
-            dispatch({type: FORGOT_PASSWORD.success, payload: response.data.message});
+            console.log(response);
+            dispatch({ type: FORGOT_PASSWORD.success, payload: response.data.message });
         } catch (error) {
+            console.log(error);
             dispatch({ type: FORGOT_PASSWORD.failed, payload: error.response.data.message });
         }
-    }
-}
+    };
+};
+
+export const resetPassword = (token, data) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({ type: RESET_PASSWORD.pending });
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const response = await axios.post(`/api/password/reset/${token}`, data, config);
+            dispatch({ type: RESET_PASSWORD.success, payload: response.data.message });
+        } catch (error) {
+            dispatch({ type: RESET_PASSWORD.failed, payload: error.response.data.message });
+        }
+    };
+};

@@ -5,6 +5,7 @@ import catchAsyncError from 'middlewares/catchAsyncError';
 import cloudinary from 'cloudinary';
 import absoluteUrl from 'next-absolute-url';
 import sendEmail from 'utils/sendEmail';
+import crypto from 'crypto';
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -103,4 +104,32 @@ export const forgortPassword = catchAsyncError(async (req, res, next) => {
         });
         return next(new ErrorHandler(error.message, 500));
     }
+});
+
+export const resetPassword = catchAsyncError(async (req, res, next) => {
+    const resetPasswordToken = crypto.createHash('sha256').update(req.query.token).digest('hex');
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: {
+            $gt: Date.now(),
+        },
+    });
+    if (!user) {
+        return next(new ErrorHandler('Password reset token is incorrect or expires', 400));
+    }
+    if (req.body.password !== req.body.confirmPassword) {
+        return next(new ErrorHandler('Password doesnt match', 400));
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        message: 'Password updated',
+    });
 });
