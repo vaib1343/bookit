@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { MDBDataTable } from 'mdbreact';
 import { getMyBookings } from 'redux/actions/bookingAction';
+import easyinvoice from 'easyinvoice';
 
 const MyBooking = () => {
     const dispatch = useDispatch();
@@ -34,15 +35,55 @@ const MyBooking = () => {
                                       <i className='fa fa-eye'></i>
                                   </a>
                               </Link>
-                              <button className='btn btn-success mx-2'>
+                              {/* <button className='btn btn-success mx-2' onClick={() => downloadInvoice(booking)}>
                                   <i className='fa fa-download'></i>
-                              </button>
+                              </button> */}
                           </>
                       ),
                   }))
                 : [],
         };
         return data;
+    };
+    const downloadInvoice = async (booking) => {
+        const data = {
+            documentTitle: 'Booking INVOICE', //Defaults to INVOICE
+            currency: 'USD',
+            taxNotation: 'vat', //or gst
+            marginTop: 25,
+            marginRight: 25,
+            marginLeft: 25,
+            marginBottom: 25,
+            logo: 'https://res.cloudinary.com/bookit/image/upload/v1617904918/bookit/bookit_logo_cbgjzv.png',
+            sender: {
+                company: 'Book IT',
+                address: '13th Street. 47 W 13th St',
+                zip: '10001',
+                city: 'New York',
+                country: 'United States',
+            },
+            client: {
+                company: `${booking.user.name}`,
+                address: `${booking.user.email}`,
+                zip: '',
+                city: `Check In: ${new Date(booking.checkInDate).toLocaleString('en-US')}`,
+                country: `Check In: ${new Date(booking.checkOutDate).toLocaleString('en-US')}`,
+            },
+            invoiceNumber: `${booking._id}`,
+            invoiceDate: `${new Date(Date.now()).toLocaleString('en-US')}`,
+            products: [
+                {
+                    quantity: `${booking.daysOfStay}`,
+                    description: `${booking.room.name}`,
+                    tax: 0,
+                    price: booking.room.pricePerNight,
+                },
+            ],
+            bottomNotice: 'This is auto generated Invoice of your booking on Book IT.',
+        };
+        const result = await easyinvoice.createInvoice(data);
+        console.log(result.pdf)
+        await easyinvoice.download(`invoice_${booking_id}.pdf`, result.pdf);
     };
     return (
         <>

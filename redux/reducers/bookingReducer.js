@@ -1,5 +1,5 @@
 const { getMiddlewareManifest } = require('next/dist/client/route-loader');
-const { ROOM_AVAILABILITY, BOOKED_DATES, MY_BOOKINGS, MY_BOOKIING_DETAILS } = require('redux/constants/bookingConstant');
+const { RESET_CHECK_BOOKING ,ROOM_AVAILABILITY, BOOKED_DATES, MY_BOOKINGS, MY_BOOKIING_DETAILS } = require('redux/constants/bookingConstant');
 
 const intialState = {
     roomAvailabilty: false,
@@ -62,6 +62,11 @@ export const bookingReducer = (state = intialState, action) => {
 
         case MY_BOOKIING_DETAILS.failed: {
             newState.loader = newState.loader.filter((el) => el !== MY_BOOKIING_DETAILS.pending);
+            return newState;
+        }
+
+        case RESET_CHECK_BOOKING: {
+            newState.roomAvailabilty = null;
             return newState;
         }
     }

@@ -8,7 +8,10 @@ import RoomFeature from './RoomFeature';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
 import { checkBookedDates, checkRoomAvailability } from 'redux/actions/bookingAction';
-import { ROOM_AVAILABILITY } from 'redux/constants/bookingConstant';
+import { RESET_CHECK_BOOKING } from 'redux/constants/bookingConstant';
+import getStripe from 'utils/getStripe';
+import { toast } from 'react-toastify';
+import room from 'models/room';
 
 const RoomDetail = () => {
     const { roomDetail } = useSelector((state) => state.room);
@@ -17,9 +20,11 @@ const RoomDetail = () => {
     const [checkInDate, setCheckInDate] = useState();
     const [checkOutDate, setCheckOutDate] = useState();
     const [daysOfStay, setdaysOfStay] = useState();
+    const [paymentLoading, setPaymentLoading] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch();
     const excludedDates = bookedDates.map((dates) => new Date(dates));
+
     const handleDate = (dates) => {
         const [checkInDate, checkOutDate] = dates;
         setCheckInDate(checkInDate);
@@ -56,9 +61,32 @@ const RoomDetail = () => {
         }
     };
 
+    const bookRoom = async (id, pricePerNight) => {
+        setPaymentLoading(true);
+        const amount = pricePerNight * daysOfStay;
+        try {
+            const link = `/api/checkoutSession/${id}?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&daysOfStay=${daysOfStay}`;
+            const { data } = await axios.get(link, {
+                params: {
+                    amount,
+                },
+            });
+            const stripe = await getStripe();
+            stripe.redirectToCheckout({ sessionId: data.id });
+            setPaymentLoading(false);
+        } catch (error) {
+            setPaymentLoading(false);
+            console.log(error);
+            toast.error('Payment failed');
+        }
+    };
+
     useEffect(() => {
         dispatch(checkBookedDates(router.query.id));
-    }, []);
+        return () => {
+            dispatch({ type: RESET_CHECK_BOOKING });
+        };
+    }, [dispatch, router.query.id]);
 
     return (
         <>
@@ -106,8 +134,8 @@ const RoomDetail = () => {
                             {!roomAvailabilty && <div className='alert alert-danger my-3 font-weight-bold'>Room is not available. Try different date.</div>}
                             {roomAvailabilty && !Object.keys(user).length && <div className='alert alert-danger my-3 font-weight-bold'>Login to book room</div>}
                             {roomAvailabilty && !!Object.keys(user).length && (
-                                <button className='btn btn-block py-3 booking-btn' onClick={handleBooking}>
-                                    Pay
+                                <button className='btn btn-block py-3 booking-btn' onClick={() => bookRoom(roomDetail._id, roomDetail.pricePerNight)} disabled={paymentLoading}>
+                                    Pay - ${daysOfStay * roomDetail.pricePerNight}
                                 </button>
                             )}
                         </div>
