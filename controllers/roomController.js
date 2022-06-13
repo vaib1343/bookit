@@ -11,17 +11,15 @@ const getAllRoom = catchAsyncError(async (req, res) => {
   let rooms = await apiFeatures.query;
   let filteredRoomCount = rooms.length;
   apiFeatures.pagination(resPerPage);
-  rooms = await apiFeatures.query.clone(); 
+  rooms = await apiFeatures.query.clone();
 
-  res
-    .status(200)
-    .json({
-      success: true,
-      count: roomCount,
-      filteredRoomCount,
-      resPerPage,
-      rooms,
-    });
+  res.status(200).json({
+    success: true,
+    count: roomCount,
+    filteredRoomCount,
+    resPerPage,
+    rooms,
+  });
 });
 
 const getRoom = catchAsyncError(async (req, res, next) => {
@@ -58,3 +56,40 @@ const deleteRoom = catchAsyncError(async (req, res, next) => {
   res.status(200).json({ success: true, message: "Room deleted" });
 });
 export { getAllRoom, createRoom, getRoom, updateRoom, deleteRoom };
+
+export const createNewReview = catchAsyncError(async (req, res) => {
+  const { roomId, rating, comment } = req.body;
+
+  const review = {
+    user: req.user._id,
+    name: req.user.name,
+    rating: Number(rating),
+    comment,
+  };
+
+  const room = await Room.findById(roomId);
+
+  const isReviewed = room.reviews.find(
+    (el) => el.user.toString() === req.user._id.toString()
+  );
+  if (isReviewed) {
+    room.reviews.forEach((review) => {
+      if (review.user.toString() === req.user._id.toString()) {
+        review.comment = comment;
+        review.rating = rating;
+      }
+    });
+  } else {
+    room.reviews.push(review);
+    room.numOfReviews = room.reviews.length;
+  }
+  room.ratings =
+    room.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    room.reviews.length;
+
+  await room.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
+  });
+});

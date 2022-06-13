@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BOOKED_DATES, MY_BOOKIING_DETAILS, MY_BOOKINGS, ROOM_AVAILABILITY } from 'redux/constants/bookingConstant';
+import { BOOKED_DATES, CREATE_NEW_REVIEW, MY_BOOKIING_DETAILS, MY_BOOKINGS, ROOM_AVAILABILITY } from 'redux/constants/bookingConstant';
 
 export const checkRoomAvailability = (room, checkInDate, checkOutDate) => {
     return async (dispatch, getState) => {
@@ -48,3 +48,15 @@ export const getMyBookingDetail = (bookingId) => {
         }
     };
 };
+
+export const createNewReview = (reviewData) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({type: CREATE_NEW_REVIEW.pending});
+            const {data} = await axios.post(`/api/reviews`, reviewData);
+            dispatch({ type: CREATE_NEW_REVIEW.success, payload: data });
+        } catch (error) {
+            dispatch({ type: CREATE_NEW_REVIEW.failed, payload: error.response.data.message });
+        }
+    }
+}
