@@ -16,6 +16,7 @@ const nextConfig = {
         STRIPE_SECRET_KEY: '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',
         STRIPE_WEBHOOK_SECRET: 'whsec_VNldn1kZxEJc1hYieeYYBP3rhkhKxbVL',
         NEXTAUTH_URL: 'https://bookit1343.vercel.app',
+        NODE_PATH:'.'
     },
     images: {
         domains: ['res.cloudinary.com'],
