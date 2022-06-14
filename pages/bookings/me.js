@@ -1,4 +1,4 @@
-import Layout from '../../components/layout/Layout';
+import Layout from 'components/layout/Layout';
 import MyBooking from 'components/booking/MyBooking';
 import { getSession } from 'next-auth/react';
 import React from 'react';

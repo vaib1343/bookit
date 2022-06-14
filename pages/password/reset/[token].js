@@ -1,5 +1,5 @@
-import Layout from '../../../components/layout/Layout';
-import ResetPassword from '../../../components/user/ResetPassword';
+import Layout from 'components/layout/Layout';
+import ResetPassword from 'components/user/ResetPassword';
 
 export default function ResetPasswordPage() {
     return (

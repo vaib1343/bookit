@@ -1,5 +1,5 @@
-import Layout from '../../components/layout/Layout';
-import ForgotPassowrd from '../../components/user/ForgotPassword';
+import Layout from 'components/layout/Layout';
+import ForgotPassowrd from 'components/user/ForgotPassword';
 
 export default function ForgotPasswordPage () {
     return (
