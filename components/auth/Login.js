@@ -5,7 +5,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import ButtonLoader from 'components/layout/ButtonLoader';
 
-const Login = () => {
+export default function Login  ()  {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -61,4 +61,3 @@ const Login = () => {
     );
 };
 
-export default Login;

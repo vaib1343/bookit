@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import RoomCard from './room/RoomCard';
 import Pagination from 'react-js-pagination';
 
-const Home = () => {
+export default function Home  () {
     const { roomList, filteredRoomsCount, resPerPage, error } = useSelector((state) => state.room);
     const [activePage, setActivePage] = useState(1);
     const router = useRouter();
@@ -52,4 +52,3 @@ const Home = () => {
     );
 };
 
-export default Home;

@@ -5,7 +5,7 @@ import { getMyBookingDetail } from 'redux/actions/bookingAction';
 import Link from 'next/link';
 import Image from 'next/image';
 
-const BookingDetail = () => {
+export default function BookingDetail  ()  {
     const { myBookingDetails } = useSelector((state) => state.booking);
     const dispatch = useDispatch();
     const router = useRouter();
@@ -86,4 +86,3 @@ const BookingDetail = () => {
     );
 };
 
-export default BookingDetail;

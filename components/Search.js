@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { guestOptions, roomTypeOptions } from 'config/roomConfig';
-const Search = () => {
+import { guestOptions, roomTypeOptions } from 'config/roomConfig'; 
+
+export default function Search  ()  {
     const router = useRouter();
     const [searchData, setSearchData] = useState({
         location: '',
@@ -68,4 +69,3 @@ const Search = () => {
     );
 };
 
-export default Search;

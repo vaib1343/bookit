@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ButtonLoader = () => {
+export default function ButtonLoader  ()  {
     return (
         <>
             <div className='lds-dual-ring'></div>
@@ -8,5 +8,3 @@ const ButtonLoader = () => {
     );
 };
 
-
-export default ButtonLoader;

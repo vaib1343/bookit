@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const RoomCard = ({ room }) => {
+export default function RoomCard  ({ room }) {
   return (
     <>
       <div className="col-sm-12 col-md-6 col-lg-3 my-3">
@@ -44,4 +44,3 @@ const RoomCard = ({ room }) => {
   );
 };
 
-export default RoomCard;

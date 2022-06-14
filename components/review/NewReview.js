@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createNewReview } from "redux/actions/bookingAction";
 import { userCanReviewAction } from "redux/actions/roomAction";
 
-const NewReview = () => {
+export default function NewReview  () {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const router = useRouter();
@@ -147,4 +147,3 @@ const NewReview = () => {
   );
 };
 
-export default NewReview;

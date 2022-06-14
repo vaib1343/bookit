@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { resetPassword } from 'redux/actions/authAction';
 import { RESET_PASSWORD } from 'redux/constants/authConstant';
 
-const ResetPassword = () => {
+export default function ResetPassword ()  {
     const dispatch = useDispatch();
     const router = useRouter();
     const { resetPasswordMessage, loader, error } = useSelector((state) => state.user);
@@ -68,4 +68,3 @@ const ResetPassword = () => {
     );
 };
 
-export default ResetPassword;

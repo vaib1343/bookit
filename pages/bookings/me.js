@@ -3,7 +3,7 @@ import MyBooking from 'components/booking/MyBooking';
 import { getSession } from 'next-auth/react';
 import React from 'react';
 
-const MyBookingPage = () => {
+export default function MyBookingPage  ()  {
     return (
         <>
             <Layout title='My bookings'>
@@ -13,7 +13,6 @@ const MyBookingPage = () => {
     );
 };
 
-export default MyBookingPage;
 
 export const getServerSideProps = async (context) => {
     const session = await getSession({ req: context.req });

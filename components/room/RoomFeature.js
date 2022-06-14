@@ -1,7 +1,7 @@
 import room from 'models/room';
 import React from 'react';
 
-const RoomFeature = ({ roomDetail }) => {
+export default function RoomFeature  ({ roomDetail })  {
     return (
         <>
             <div className='features mt-5'>
@@ -40,4 +40,3 @@ const RoomFeature = ({ roomDetail }) => {
     );
 };
 
-export default RoomFeature;

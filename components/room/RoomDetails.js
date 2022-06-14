@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import NewReview from "components/review/NewReview";
 import ListReview from "components/review/ListReview";
 
-const RoomDetail = () => {
+export default function RoomDetail  ()  {
   const { roomDetail } = useSelector((state) => state.room);
   const { roomAvailabilty, bookedDates } = useSelector(
     (state) => state.booking
@@ -201,4 +201,3 @@ const RoomDetail = () => {
   );
 };
 
-export default RoomDetail;

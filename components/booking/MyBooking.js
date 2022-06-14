@@ -6,7 +6,7 @@ import { MDBDataTable } from 'mdbreact';
 import { getMyBookings } from 'redux/actions/bookingAction';
 import easyinvoice from 'easyinvoice';
 
-const MyBooking = () => {
+export default function MyBooking ()  {
     const dispatch = useDispatch();
     const { myBooking } = useSelector((state) => state.booking);
     useEffect(() => {
@@ -95,4 +95,3 @@ const MyBooking = () => {
     );
 };
 
-export default MyBooking;

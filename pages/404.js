@@ -1,7 +1,6 @@
 import NotFound from "components/layout/NotFound";
 import React from "react";
-
-const NotFoundPage = () => {
+export default function NotFoundPage ()  {
   return (
     <>
       <NotFound />
@@ -9,4 +8,3 @@ const NotFoundPage = () => {
   );
 };
 
-export default NotFoundPage;

@@ -1,6 +1,6 @@
 import React from "react";
 
-const ListReview = ({ reviews = [] }) => {
+export default function ListReview  ({ reviews = [] })  {
   return (
     <>
       {reviews?.map((review, index) => (
@@ -18,4 +18,4 @@ const ListReview = ({ reviews = [] }) => {
   );
 };
 
-export default ListReview;
+

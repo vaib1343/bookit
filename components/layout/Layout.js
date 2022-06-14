@@ -4,7 +4,7 @@ import Header from "components/layout/Header";
 import Footer from "components/layout/Footer";
 
 
-const Layout = ({ children, title = "Book best Hotels" }) => {
+export default function Layout ({ children, title = "Book best Hotels" })  {
   return (
     <>
       <Head>
@@ -17,4 +17,3 @@ const Layout = ({ children, title = "Book best Hotels" }) => {
   );
 };
 
-export default Layout;

@@ -4,7 +4,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserDetails } from 'redux/actions/authAction';
 import { signOut } from 'next-auth/react';
-const Header = () => {
+
+export default function Header  ()  {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
     useEffect(() => {
@@ -65,4 +66,3 @@ const Header = () => {
     );
 };
 
-export default Header;

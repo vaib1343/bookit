@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-const NotFound = () => {
+export default function NotFound() {
   return (
     <>
       <div className="page-not-found-wrapper">
@@ -17,4 +17,3 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;

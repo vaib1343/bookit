@@ -5,7 +5,7 @@ import { forgotPasswordAction } from 'redux/actions/authAction';
 import { FORGOT_PASSWORD } from 'redux/constants/authConstant';
 import { toast } from 'react-toastify';
 
-const ForgotPassowrd = () => {
+export default function ForgotPassowrd  () {
     const { forgotPasswordMessage, loader, error } = useSelector((state) => state.user);
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState('');
@@ -54,4 +54,3 @@ const ForgotPassowrd = () => {
     );
 };
 
-export default ForgotPassowrd;
