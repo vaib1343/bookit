@@ -1,13 +1,15 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { createNewReview } from "redux/actions/bookingAction";
+import { userCanReviewAction } from "redux/actions/roomAction";
 
 const NewReview = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
+  const { userCanReview } = useSelector((state) => state.room);
 
   const handleSubmit = (e) => {
     const reviewData = {
@@ -18,39 +20,64 @@ const NewReview = () => {
     dispatch(createNewReview(reviewData));
   };
 
-  const setUserRating = () => {
+  function setUserRatings() {
     const stars = document.querySelectorAll(".star");
+
     stars.forEach((star, index) => {
-      star.startValue = index + 1;
-      ["click", "mouseover", "mouseout"].forEach((e) => {
-        star.addEventListener(e, showRating);
+      star.starValue = index + 1;
+
+      ["click", "mouseover", "mouseout"].forEach(function (e) {
+        star.addEventListener(e, showRatings);
       });
     });
-    function showRating(e) {
+
+    function showRatings(e) {
       stars.forEach((star, index) => {
         if (e.type === "click") {
+          if (index < this.starValue) {
+            star.classList.add("red");
+
+            setRating(this.starValue);
+          } else {
+            star.classList.remove("red");
+          }
         }
+
         if (e.type === "mouseover") {
+          if (index < this.starValue) {
+            star.classList.add("light-red");
+          } else {
+            star.classList.remove("light-red");
+          }
         }
+
         if (e.type === "mouseout") {
+          star.classList.remove("light-red");
         }
       });
     }
-  };
+  }
+
+  useEffect(() => {
+    dispatch(userCanReviewAction(router.query.id));
+  }, [router.query.id]);
 
   return (
     <>
       <div className="container">
         <div className="row d-flex justify-content-between">
-          <button
-            id="review_btn"
-            type="button"
-            className="btn btn-primary mt-4 mb-5"
-            data-toggle="modal"
-            data-target="#ratingModal"
-          >
-            Submit Your Review
-          </button>
+          {userCanReview && (
+            <button
+              id="review_btn"
+              type="button"
+              className="btn btn-primary mt-4 mb-5"
+              data-toggle="modal"
+              data-target="#ratingModal"
+              onClick={setUserRatings}
+            >
+              Submit Your Review
+            </button>
+          )}
 
           <div
             className="modal fade"
@@ -99,13 +126,14 @@ const NewReview = () => {
                     id="review"
                     className="form-control mt-3"
                     value={comment}
-                    onChange={(e) => setComment(e.target.valeu)}
+                    onChange={(e) => setComment(e.target.value)}
                   ></textarea>
 
                   <button
                     className="btn my-3 float-right review-btn px-4 text-white"
                     data-dismiss="modal"
                     aria-label="Close"
+                    onClick={handleSubmit}
                   >
                     Submit
                   </button>

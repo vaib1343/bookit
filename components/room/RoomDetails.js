@@ -15,6 +15,8 @@ import { RESET_CHECK_BOOKING } from "redux/constants/bookingConstant";
 import getStripe from "utils/getStripe";
 import { toast } from "react-toastify";
 import NewReview from "components/review/NewReview";
+import ListReview from "components/review/ListReview";
+
 const RoomDetail = () => {
   const { roomDetail } = useSelector((state) => state.room);
   const { roomAvailabilty, bookedDates } = useSelector(
@@ -106,7 +108,10 @@ const RoomDetail = () => {
         <p>{roomDetail.address}</p>
         <div className="ratings mt-auto mb-3">
           <div className="rating-outer">
-            <div className="rating-inner"></div>
+            <div
+              className="rating-inner"
+              style={{ width: `${(roomDetail.ratings / 5) * 100}%` }}
+            ></div>
           </div>
           <span id="no_of_reviews">({roomDetail.numOfReviews} Reviews)</span>
         </div>
@@ -189,25 +194,7 @@ const RoomDetail = () => {
         <div className="reviews w-75">
           <h3>Reviews:</h3>
           <hr />
-          <div className="review-card my-3">
-            <div className="rating-outer">
-              <div className="rating-inner"></div>
-            </div>
-            <p className="review_user">by John</p>
-            <p className="review_comment">Good Quality</p>
-
-            <hr />
-          </div>
-
-          <div className="review-card my-3">
-            <div className="rating-outer">
-              <div className="rating-inner"></div>
-            </div>
-            <p className="review_user">by John</p>
-            <p className="review_comment">Good Quality</p>
-
-            <hr />
-          </div>
+          <ListReview reviews={roomDetail.reviews}/>
         </div>
       </div>
     </>

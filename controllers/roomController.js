@@ -2,6 +2,7 @@ import Room from "models/room";
 import ErrorHandler from "utils/errorHandler";
 import catchAsyncError from "middlewares/catchAsyncError";
 import ApiFeature from "utils/apiFeature";
+import Booking from "models/booking";
 
 const getAllRoom = catchAsyncError(async (req, res) => {
   const resPerPage = 4;
@@ -91,5 +92,19 @@ export const createNewReview = catchAsyncError(async (req, res) => {
 
   res.status(200).json({
     success: true,
+  });
+});
+
+export const checkUserCanReview = catchAsyncError(async (req, res) => {
+  const roomId = req.query.roomId;
+  const review = await Booking.find({
+    user: req.user._id,
+    room: roomId,
+  });
+  let userCanReview = false;
+  if (review.length > 0) userCanReview = true;
+  res.status(200).json({
+    success: true,
+    userCanReview,
   });
 });
