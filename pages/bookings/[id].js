@@ -1,5 +1,5 @@
-import Layout from 'components/layout/Layout';
-import MyBookingDetail from 'components/booking/BookingDetail';
+import Layout from '../../components/layout/Layout';
+import MyBookingDetail from '../../components/booking/BookingDetail';
 import { getSession } from 'next-auth/react';
 import React from 'react';
 

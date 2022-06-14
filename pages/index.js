@@ -1,5 +1,5 @@
-import Layout from 'components/layout/Layout';
-import Home from 'components/Home';
+import Layout from '../components/layout/Layout';
+import Home from '../components/Home';
 import { wrapper } from 'redux/store';
 import { getAllRoom } from 'redux/actions/roomAction';
 export default function HomePage() {
