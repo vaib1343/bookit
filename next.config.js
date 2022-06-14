@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    webpack(config) {
-        config.resolve.modules.push(__dirname)
-        return config;
-      },
     reactStrictMode: true,
     env: {
         DB_LOCAL_URI: 'mongodb+srv://vaib1343:1343@cluster0.nyght.mongodb.net/?retryWrites=true&w=majority',
