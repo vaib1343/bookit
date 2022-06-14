@@ -3,8 +3,8 @@ import React from "react";
 const ListReview = ({ reviews = [] }) => {
   return (
     <>
-      {reviews?.map((review) => (
-        <div className="review-card my-3">
+      {reviews?.map((review, index) => (
+        <div className="review-card my-3" key={index}>
           <div className="rating-outer">
             <div className="rating-inner" style={{ width: `${(review.rating / 5) * 100}%` }}></div>
           </div>

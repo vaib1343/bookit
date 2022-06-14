@@ -60,7 +60,7 @@ const NewReview = () => {
 
   useEffect(() => {
     dispatch(userCanReviewAction(router.query.id));
-  }, [router.query.id]);
+  }, [router.query.id, dispatch]);
 
   return (
     <>
@@ -82,7 +82,7 @@ const NewReview = () => {
           <div
             className="modal fade"
             id="ratingModal"
-            tabindex="-1"
+            tabIndex="-1"
             role="dialog"
             aria-labelledby="ratingModalLabel"
             aria-hidden="true"
